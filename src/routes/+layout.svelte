@@ -11,9 +11,6 @@
 	</main>
 
 	<footer>
-		<p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
-		</p>
 	</footer>
 </div>
 
@@ -43,9 +40,9 @@
 		padding: 12px;
 	}
 
-	footer a {
+	/* footer a {
 		font-weight: bold;
-	}
+	} */
 
 	@media (min-width: 480px) {
 		footer {
