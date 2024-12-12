@@ -46,7 +46,7 @@
 	>
 		<div class="mb-8 text-center">
 			<div class="flex justify-center">
-				<img class="h-40" src="src/lib/images/ProtasklyLoginIcon.svg" alt="Logo" />
+				<img class="h-40" src='/ProtasklyLoginIcon.svg' alt="Logo" />
 			</div>
 			<p class="mt-2 text-gray-600">Please sign in to continue</p>
 		</div>
