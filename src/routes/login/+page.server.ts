@@ -11,7 +11,8 @@ export const actions = {
 		const data = await request.formData();
 		const username = data.get('username');
 		const password = data.get('password');
-
+		console.log(apiUrl);
+		
 		if (!username || !password) {
 			return fail(400, { error: 'Username and password are required' });
 		}
@@ -45,13 +46,15 @@ export const actions = {
 				path: '/',
 				secure: false
 			});
+			data.set("token", token)
 			return {success: true,
 				token: token,
 				username: user.username,
 				firstName: user.firstName,
 				lastName: user.lastName,
 				email: user.email,
-				message: 'Authenticated successfully'};
+				message: 'Authenticated successfully',
+				apiUrl: apiUrl};
 		} catch (error) {
 			console.error(error);
 			return fail(500, { error: 'Internal server error' });
