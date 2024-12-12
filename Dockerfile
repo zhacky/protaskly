@@ -16,7 +16,7 @@ COPY . .
 # Build the SvelteKit app
 RUN npm run build
 
-EXPOSE 4173
+EXPOSE 8080
 
 # Start Production
-CMD ["npm", "run", "preview", "--", "--host"]
+CMD ["npm", "run", "preview", "--", "--host", "--port", "8080"]
