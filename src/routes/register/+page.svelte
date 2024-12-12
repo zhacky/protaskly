@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import ProtasklyCreateIcon from '$lib/images/ProtasklyLoginIcon.svg';
+    import ProtasklyCreateIcon from '/ProtasklyLoginIcon.svg';
 
     let username = '';
     let password = '';
