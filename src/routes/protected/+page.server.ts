@@ -8,7 +8,10 @@ export const load = async ({cookies}) => {
 		throw redirect(302, '/login')
 	}
 
-	const apiUrl = env.VITE_API_URL;
+	let apiUrl = env.VITE_API_URL;
+	if (apiUrl === undefined) {
+		apiUrl = "http://api.protaskly.com:8080";
+	}
 	try	{
 		const response = await fetch(`${apiUrl}/auth/${username}`, {
 			method: 'GET',
