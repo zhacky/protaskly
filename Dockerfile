@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:22-alpine AS build
+FROM node:20 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -16,14 +16,7 @@ COPY . .
 # Build the SvelteKit app
 RUN npm run build
 
-# Use a lightweight web server to serve the built app
-FROM nginx:alpine
+EXPOSE 4173
 
-# Copy the built app from the build stage
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 8080
-EXPOSE 8080
-
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Start Production
+CMD ["npm", "run", "preview", "--", "--host"]
