@@ -4,7 +4,10 @@ import { env } from '$env/dynamic/private';
 
 export const actions = {
 	default: async ({ cookies, request }) => {
-		const apiUrl = env.VITE_API_URL;
+		let apiUrl = env.VITE_API_URL;
+		if (apiUrl === undefined) {
+			apiUrl = "http://api.protaskly.com:8080";
+		}
 		const data = await request.formData();
 		const username = data.get('username');
 		const password = data.get('password');
