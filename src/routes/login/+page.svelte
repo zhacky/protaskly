@@ -10,7 +10,7 @@
 
 	onMount(async() => {
 		const f = form;
-		if (f) {
+		if (f?.success) {
 			console.debug(f);
 			const token = f.token;
 			const username = f.username;
@@ -22,9 +22,9 @@
 			console.debug('firstName: ', firstName);
 			console.debug('lastName: ', lastName);
 			console.debug('email: ', email);
-			localStorage.setItem('token', f.token);
-			localStorage.setItem('username', f.username);
-			await goto("/protected");
+			if (token){
+				await goto("/protected");
+			}
 		} else {
 			console.debug('Please log in.');
 		}

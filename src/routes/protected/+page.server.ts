@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 export const load = async ({cookies}) => {
@@ -9,15 +9,18 @@ export const load = async ({cookies}) => {
 	}
 
 	const apiUrl = env.VITE_API_URL;
-	// try	{
-	// 	const response = await fetch(`${apiUrl}/auth`, {
-	// 		method: 'GET',
-	// 		headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-	// 	});
-	// 	return response.json();
-	// } catch (error) {
-	// 	throw redirect(302, '/login');
-	// }
-
-	return {username: username, token: token, apiUrl: apiUrl};
+	try	{
+		const response = await fetch(`${apiUrl}/auth/${username}`, {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
+		});
+		if (!response.ok) {
+			return fail(response.status, { error: 'Authentication failed' });
+		}
+		if (response.ok) {
+			return await response.json();
+		}
+	} catch (error) {
+		throw redirect(302, '/login');
+	}
 }

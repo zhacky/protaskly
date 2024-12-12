@@ -42,7 +42,6 @@ export const actions = {
 				path: '/',
 				secure: false
 			});
-			data.set("token", token)
 			return {success: true,
 				token: token,
 				username: user.username,
