@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import ProtasklyCreateIcon from '/ProtasklyLoginIcon.svg';
 
     let username = '';
     let password = '';
@@ -10,9 +9,9 @@
     let error = '';
 
     let errorMessage = '';
-	let birthdayDay = '';
-	let birthdayMonth = '';
-	let birthdayYear = '';
+	// let birthdayDay = '';
+	// let birthdayMonth = '';
+	// let birthdayYear = '';
 	let newPassword = '';
 	let confirmPassword = '';
 	let gender = '';
@@ -22,23 +21,23 @@
 	let showStrength = false;
 
 
-	const days = Array.from({ length: 31 }, (_, i) => i + 1);
-	const months = [
-		{ value: '01', label: 'January' },
-		{ value: '02', label: 'February' },
-		{ value: '03', label: 'March' },
-		{ value: '04', label: 'April' },
-		{ value: '05', label: 'May' },
-		{ value: '06', label: 'June' },
-		{ value: '07', label: 'July' },
-		{ value: '08', label: 'August' },
-		{ value: '09', label: 'September' },
-		{ value: '10', label: 'October' },
-		{ value: '11', label: 'November' },
-		{ value: '12', label: 'December' }
-	];
-	const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
-	const genders = ['Male', 'Female'];
+	// const days = Array.from({ length: 31 }, (_, i) => i + 1);
+	// const months = [
+	// 	{ value: '01', label: 'January' },
+	// 	{ value: '02', label: 'February' },
+	// 	{ value: '03', label: 'March' },
+	// 	{ value: '04', label: 'April' },
+	// 	{ value: '05', label: 'May' },
+	// 	{ value: '06', label: 'June' },
+	// 	{ value: '07', label: 'July' },
+	// 	{ value: '08', label: 'August' },
+	// 	{ value: '09', label: 'September' },
+	// 	{ value: '10', label: 'October' },
+	// 	{ value: '11', label: 'November' },
+	// 	{ value: '12', label: 'December' }
+	// ];
+	// const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+	// const genders = ['Male', 'Female'];
 
 	function evaluatePasswordStrength(newPassword: string): void {
 		if (newPassword.length < 6) {
@@ -80,7 +79,7 @@
             console.log('Registration successful');
             const data = await response.json();
             localStorage.setItem('token', data.token);
-            await goto('/protected');
+            await goto('/login');
         } else {
             error = 'Registration failed';
         }
@@ -92,18 +91,45 @@
 		class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md transform transition-all duration-300 hover:scale-[1.01]">
 		<div class="text-center mb-8">
 			<div class="flex justify-center">
-				<img class="h-40" src={ProtasklyCreateIcon} alt="Logo">
+				<img class="h-40" src="/ProtasklyLoginIcon.svg" alt="Logo">
 			</div>
 
 			<p class="text-gray-600 mt-2">Create your account</p>
 		</div>
 
-		<form on:submit={handleRegister} class="space-y-6">
+		<form on:submit|preventDefault={handleRegister} class="space-y-6">
 			{#if errorMessage}
 				<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
 					<span class="block sm:inline">{errorMessage}</span>
 				</div>
 			{/if}
+
+			<div class="space-y-2">
+				<label for="username"></label>
+				<input
+					type="text"
+					id="username"
+					bind:value={username}
+					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+					placeholder="Username"
+					required
+				/>
+			</div>	
+
+			<div class="space-y-2">
+				<label for="password"></label>
+				<input
+					type="password"
+					id="password"
+					bind:value={password}
+					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+					placeholder="New password"
+					required
+				/>
+				{#if showStrength}
+					<p class={`text-sm ${passwordColor}`}>{passwordStrength} password</p>
+				{/if}
+			</div>
 
 			<div class="space-y-2">
 				<label for="firstName"></label>
@@ -113,6 +139,7 @@
 					bind:value={firstName}
 					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
 					placeholder="First name"
+					required
 				/>
 			</div>
 
@@ -124,46 +151,47 @@
 					bind:value={lastName}
 					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
 					placeholder="Last name"
+					required
 				/>
 			</div>
 
-			<div class="space-y-2">
-				<label class="block text-sm font-medium text-gray-700" for="birthdate">Birthday</label>
-				<div class="flex space-x-2">
-					<select bind:value={birthdayDay}
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-						<option value="" disabled selected>Day</option>
-						{#each days as day}
-							<option value={day}>{day}</option>
-						{/each}
-					</select>
-					<select bind:value={birthdayMonth}
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-						<option value="" disabled selected>Month</option>
-						{#each months as month}
-							<option value={month.value}>{month.label}</option>
-						{/each}
-					</select>
-					<select bind:value={birthdayYear}
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-						<option value="" disabled selected>Year</option>
-						{#each years as year}
-							<option value={year}>{year}</option>
-						{/each}
-					</select>
+				<!-- <div class="space-y-2">
+					<label class="block text-sm font-medium text-gray-700" for="birthdate">Birthday</label>
+					<div class="flex space-x-2">
+						<select bind:value={birthdayDay}
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+							<option value="" disabled selected>Day</option>
+							{#each days as day}
+								<option value={day}>{day}</option>
+							{/each}
+						</select>
+						<select bind:value={birthdayMonth}
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+							<option value="" disabled selected>Month</option>
+							{#each months as month}
+								<option value={month.value}>{month.label}</option>
+							{/each}
+						</select>
+						<select bind:value={birthdayYear}
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+							<option value="" disabled selected>Year</option>
+							{#each years as year}
+								<option value={year}>{year}</option>
+							{/each}
+						</select>
+					</div>
 				</div>
-			</div>
 
-			<div class="space-y-2">
-				<label for="gender"></label>
-				<select bind:value={gender} id="gender"
-								class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-					<option value="" disabled selected>Select your gender</option>
-					{#each genders as genderOption}
-						<option value={genderOption}>{genderOption}</option>
-					{/each}
-				</select>
-			</div>
+				<div class="space-y-2">
+					<label for="gender"></label>
+					<select bind:value={gender} id="gender"
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+						<option value="" disabled selected>Select your gender</option>
+						{#each genders as genderOption}
+							<option value={genderOption}>{genderOption}</option>
+						{/each}
+					</select>
+				</div> -->
 
 			<div class="space-y-2">
 				<label for="email"></label>
@@ -173,28 +201,18 @@
 					bind:value={email}
 					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
 					placeholder="Email"
+					required
 				/>
 			</div>
 
-			<div class="space-y-2">
-				<label for="newPassword"></label>
-				<input
-					type="password"
-					id="newPassword"
-					bind:value={newPassword}
-					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-					placeholder="New password"
-				/>
-				{#if showStrength}
-					<p class={`text-sm ${passwordColor}`}>{passwordStrength} password</p>
-				{/if}
-			</div>
+			
 
-			<div class="space-y-2">
+			<!-- <div class="space-y-2">
 				<label for="confirmPassword"></label>
 				<input
 					type="password"
 					id="confirmPassword"
+					name="password"
 					bind:value={confirmPassword}
 					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
 					placeholder="Confirm password"
@@ -202,7 +220,7 @@
 				{#if showStrength}
 					<p class={`text-sm ${passwordColor}`}>{passwordStrength} password</p>
 				{/if}
-			</div>
+			</div> -->
 
 			<button
 				type="submit"
