@@ -1,20 +1,18 @@
 <script lang="ts">
 	import '../app.css';
+	import Header from './Header.svelte';
+	import Footer from './Footer.svelte';
 
 	let { children } = $props();
 </script>
 
 <div class="app">
-
 	<main>
 		{@render children()}
 	</main>
-
-	<footer>
-	</footer>
 </div>
 
-<style>
+<!-- <style>
 	.app {
 		display: flex;
 		flex-direction: column;
@@ -49,4 +47,4 @@
 			padding: 12px 0;
 		}
 	}
-</style>
+</style> -->

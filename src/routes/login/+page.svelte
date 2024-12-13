@@ -1,10 +1,9 @@
 <script lang='ts'>
 	import { onMount } from 'svelte';
 	import type { PageData, ActionData } from './$types';
-
-	let { form }: { data: PageData, form: ActionData } = $props();
 	import { goto } from '$app/navigation';
 
+	let { form }: { data: PageData, form: ActionData } = $props();
 	let incorrect = false;
 	let message = '';
 	let showPassword = false;
@@ -31,7 +30,7 @@
 			console.debug('firstName: ', firstName);
 			console.debug('lastName: ', lastName);
 			console.debug('email: ', email);
-			await goto("/protected");
+			await goto("/profile");
 		
 		} else {
 			console.debug('Please log in.');
@@ -92,7 +91,7 @@
 					{/if}
 					<button
 						type="button"
-						on:click={() => showPassword = !showPassword}
+						onclick={() => showPassword = !showPassword}
 						aria-label="Toggle password visibility"
 						class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 hover:text-gray-700 focus:outline-none"
 					>
@@ -105,12 +104,12 @@
 				<label class="flex items-center">
 					<input
 						type="checkbox" bind:checked={rememberMe}
-					on:click={openDialog}
+					onclick={openDialog}
 					/>
 					<span class="ml-2 text-sm text-gray-600">Remember me</span>
 				</label>
 				<button
-					on:click={(event) => { event.preventDefault(); openDialog(event); }}
+					onclick={(event) => { event.preventDefault(); openDialog(event); }}
 					class="text-sm text-blue-600 hover:text-blue-800">Forgot password?</button
 				>
 			</div>
