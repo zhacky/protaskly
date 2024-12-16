@@ -1,156 +1,55 @@
 <script lang="ts">
-    import type { PageData } from './$types';
+	import type { PageData } from './$types';
+	import PageHeader from '../PageHeader.svelte';
+	import PageSideBar from '../PageSideBar.svelte';
 
 
-    let { data }: { data: PageData } = $props();
+	export let data: PageData;
+	let isOpens = false;
 
-    console.debug('Data: ', data);
-
-	let user = {
-		username: 'johndoe',
-		email: 'johndoe@example.com',
-		fullName: 'John Doe',
-		avatar: 'https://via.placeholder.com/150',
-		company: '',
-	};
-
-	let isEditing = false;
-
-	const toggleEdit = () => {
-		isEditing = !isEditing;
-	};
-
-	const saveProfile = () => {
-		// Save the profile (e.g., to a backend API)
-		console.log('Profile saved:', user);
-		toggleEdit();
-	};
-
-	const handleAvatarChange = (e: Event) => {
-		const target = e.target as HTMLInputElement;
-		if (target?.files?.[0]) {
-			user.avatar = URL.createObjectURL(target.files[0]);
-		}
-	};
 
 </script>
 
-<div class="">
-	<div class="max-w-3xl mx-auto bg-white p-10 rounded-xl h-auto w-screen profile">
-		<div class="flex justify-between items-center mb-8">
-			<h1>Welcome, {data.firstName}!</h1>
-			<button
-				class="bg-blue-500 text-white px-6 py-3 rounded-xl w-36 text-lg hover:bg-blue-600 transition-all"
-				on:click={toggleEdit}
-			>
-				{isEditing ? 'Cancel' : 'Edit'}
-			</button>
+<div class="bg-gray-100 flex flex-col items-center justify-center">
+	<div class="pb-10"><PageHeader/></div>
+	
+	<div class="border max-w-2xl mx-auto bg-white shadow-xl rounded-2xl p-6">	
+	  <div class="flex flex-col items-center">
+		<div class="w-24 h-24 rounded-full overflow-hidden">
+			<img src="https://via.placeholder.com/150" alt="User Avatar" class="w-full h-full object-cover">
 		</div>
+		<h1 class="mt-4 text-2xl font-bold text-gray-800">Welcome, {data.firstName}!</h1>
+		<p class="text-sm text-gray-500">{data.email}</p>
+	  </div>
+  
 
-		<div class="flex justify-center items-center flex-col space-y-6">
-			<div class="relative">
-				<img
-					src={user.avatar}
-					alt="Avatar"
-					class="w-40 h-40 rounded-full object-cover border-4 border-gray-300 shadow-lg"
-				/>
-				{#if isEditing}
-					<label for="avatarUpload" class="absolute bottom-0 right-0 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full cursor-pointer">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12l-4 4m0 0l-4-4m4 4V7" />
-						</svg>
-					</label>
-					<input
-						id="avatarUpload"
-						type="file"
-						class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-						accept="image/*"
-						on:change={handleAvatarChange}
-					/>
-				{/if}
-			</div>
-
-			<div class="w-full space-y-6">
-				<div class="flex justify-between items-center">
-					<label for="fullName" class="text-xl font-semibold text-gray-700">Full Name</label>
-					{#if isEditing}
-						<input
-							type="text"
-							id="fullName"
-							bind:value={user.fullName}
-							class="w-2/3 px-5 py-3 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-						/>
-					{:else}
-						<p class="text-xl text-gray-800">{user.fullName}</p>
-					{/if}
-				</div>
-
-				<div class="flex justify-between items-center">
-					<label for="email" class="text-xl font-semibold text-gray-700">Email</label>
-					{#if isEditing}
-						<input
-							type="email"
-							id="email"
-							bind:value={user.email}
-							class="w-2/3 px-5 py-3 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-						/>
-					{:else}
-						<p class="text-xl text-gray-800">{user.email}</p>
-					{/if}
-				</div>
-
-				<div class="flex justify-between items-center">
-					<label for="username" class="text-xl font-semibold text-gray-700">Username</label>
-					{#if isEditing}
-            <input
-							id="username"
-							bind:value={user.username}
-							class="w-2/3 px-5 py-3 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-						/>
-					{:else}
-						<p class="text-xl text-gray-800">{user.username}</p>
-					{/if}
-				</div>
-
-				<div class="flex justify-between items-center">
-					<label for="email" class="text-xl font-semibold text-gray-700">Company Name</label>
-					{#if isEditing}
-						<input
-							type="companyName"
-							id="companyName"
-							bind:value={user.company}
-							class="w-2/3 px-5 py-3 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-						/>
-					{:else}
-						<p class="text-xl text-gray-800">{user.company}</p>
-					{/if}
-				</div>
-
-			</div>
-
-			{#if isEditing}
-				<div class="mt-6 flex justify-end space-x-6">
-					<button
-						on:click={saveProfile}
-						class="bg-blue-600 text-white px-8 py-3 rounded-lg text-xl hover:bg-blue-700 transition-all"
-					>
-						Save Changes
-					</button>
-					<button
-						on:click={toggleEdit}
-						class="bg-gray-400 text-white px-8 py-3 rounded-lg text-xl hover:bg-gray-500 transition-all"
-					>
-						Cancel
-					</button>
-				</div>
-			{/if}
+	  <div class="mt-6">
+		<div class="border-t border-gray-200 py-4">
+		  <p class="text-sm text-gray-500">Username</p>
+		  <h3 class="text-lg font-semibold text-gray-800">{data.username}</h3>
 		</div>
+		<div class="border-t border-gray-200 py-4">
+		  <p class="text-sm text-gray-500">Full Name</p>
+		  <h3 class="text-lg font-semibold text-gray-800">{data.firstName} {data.lastName}</h3>
+		</div>
+		<div class="border-t border-gray-200 py-4">
+		  <p class="text-sm text-gray-500">Company Name</p>
+		  <h3 class="text-lg font-semibold text-gray-800">Antajia Software Development Services.</h3>
+		</div>
+	  </div>
+  
+
+	  <div class="mt-6 flex justify-center gap-4">
+		<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Edit Profile</button>
+		<button class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Message</button>
+	  </div>
 	</div>
+
+	<PageSideBar bind:isOpens={isOpens}/>
 </div>
 
 <style>
-	.profile {
-      border: 2px solid #16BDCA;
+	.border {
+		border: 1px solid gray;
 	}
 </style>
-
