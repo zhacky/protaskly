@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
 
-	let { data }: { data: PageData } = $props();
+	export let data: PageData;
 
 	console.debug('Data: ', data);
 	setTimeout(async () => {

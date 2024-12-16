@@ -3,7 +3,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { goto } from '$app/navigation';
 
-	let { form }: { data: PageData, form: ActionData } = $props();
+	export let form: ActionData;
 	let incorrect = false;
 	let message = '';
 	let showPassword = false;
@@ -41,7 +41,7 @@
 	class="flex min-h-screen items-center justify-center"
 >
 	<div
-		class="w-full max-w-md transform rounded-lg bg-white p-8 shadow-lg transition-all duration-300 hover:scale-[1.01]"
+		class="w-full max-w-md transform rounded-2xl bg-white p-8 shadow-xl transition-all duration-300 hover:scale-[1.01]"
 	>
 		<div class="mb-8 text-center">
 			<div class="flex justify-center">
@@ -60,59 +60,55 @@
 				</div>
 			{/if}
 
-			<div class="space-y-2">
-				<input
-					type="text"
-					id="username"
-					name="username"
-					class="w-full rounded-md border border-gray-300 px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-					placeholder="Username / Email"
-				/>
+			<div class="space-y-2">	
+					<div class="relative text-gray-400"><span class="absolute inset-y-0 left-0 flex items-center p-1 pl-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></span> 
+						<input type="text" name="username" id="username" class="pl-12 mb-2 bg-gray-50 text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring ring-transparent focus:ring-1 focus:outline-none focus:ring-gray-400 block w-full p-2.5 rounded-l-lg py-3 px-4" placeholder="Username" autocomplete="off">
+					</div>			
 			</div>
 
-			<div class="space-y-2">
-				<div class="relative">
-					{#if showPassword}
-						<input
-							type="text"
-							id="password"
-							name="password"			
-							class="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-							placeholder="Password"
-						/>
-					{:else}
-						<input
-							type="password"
-							id="password"
-							name="password"		
-							class="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-							placeholder="Password"
-						/>
-					{/if}
-					<button
-						type="button"
-						onclick={() => showPassword = !showPassword}
-						aria-label="Toggle password visibility"
-						class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 hover:text-gray-700 focus:outline-none"
-					>
-						<i class={showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}></i>
-					</button>
-				</div>
+			<div class="relative text-gray-400">
+				<span class="absolute inset-y-0 left-0 flex items-center p-1 pl-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-asterisk">
+						<rect width="18" height="18" x="3" y="3" rx="2"></rect>
+						<path d="M12 8v8"></path>
+						<path d="m8.5 14 7-4"></path>
+						<path d="m8.5 10 7 4"></path>
+					</svg>
+				</span>
+			
+				<!-- Password Input -->
+				<input
+					type={showPassword ? 'text' : 'password'}
+					id="password"
+					name="password"
+					class="pl-12 mb-2 bg-gray-50 text-gray-600 border focus:border-transparent border-gray-300 sm:text-sm rounded-lg ring ring-transparent focus:ring-1 focus:outline-none focus:ring-gray-400 block w-full p-2.5 rounded-l-lg py-3 px-4"
+					placeholder="Password"
+				/>
+			
+				<!-- Toggle Password Button -->
+				<button
+					type="button"
+					on:click={() => showPassword = !showPassword}
+					aria-label="Toggle password visibility"
+					class="absolute inset-y-0 right-0 px-3 py-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+				>
+					<i class={showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}></i>
+				</button>
 			</div>
 
 			<div class="flex items-center justify-between">
 				<label class="flex items-center">
 					<input
 						type="checkbox" bind:checked={rememberMe}
-					onclick={openDialog}
+					on:click={openDialog}
 					/>
 					<span class="ml-2 text-sm text-gray-600">Remember me</span>
 				</label>
 				<button
-					onclick={(event) => { event.preventDefault(); openDialog(event); }}
+					on:click={(event) => { event.preventDefault(); openDialog(event); }}
 					class="text-sm text-blue-600 hover:text-blue-800">Forgot password?</button
 				>
-			</div>
+			</div>	
 
 			<button
 				type="submit"
