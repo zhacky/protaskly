@@ -8,7 +8,6 @@
 	import { format } from 'date-fns';
     import PageHeader from '../PageHeader.svelte';
     import PageSideBar from '../PageSideBar.svelte';
-	import Page from '../+page.svelte';
 
 	let isOpen = false;
 	let projectId: number;
