@@ -6,6 +6,9 @@
 	import { dropzone, draggable } from '../../lib/dnd';
 	import AddTaskDialog from '../AddTaskDialog.svelte';
 	import { format } from 'date-fns';
+    import PageHeader from '../PageHeader.svelte';
+    import PageSideBar from '../PageSideBar.svelte';
+	import Page from '../+page.svelte';
 
 	let isOpen = false;
 	let projectId: number;
@@ -85,6 +88,7 @@
 
 {#if project}
 	<div>
+        <PageHeader/>
 		<h1>{project.title}</h1>
 		<div class="p-4 absolute left-20">
 			<button
@@ -133,8 +137,9 @@
 				{/each}
 			</ul>
 			<AddTaskDialog {isOpen} on:taskCreated={handleTaskCreated} on:close={handleClose} />
+            
 		</div>
-
+        <PageSideBar/>
 		<style>
         ul {
             list-style: none;
