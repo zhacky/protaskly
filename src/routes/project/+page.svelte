@@ -44,6 +44,7 @@
             isDialogOpen = false;
             newProjectTitle = '';
             newProjectDescription = '';
+            console.log('Project created successfully');
         }
     }
 
@@ -51,7 +52,7 @@
     function navigateToKanban(projectId: number) {
         if (projectId !== undefined) {
             console.log(`Navigating to project with ID: ${projectId}`);
-            goto(`/router-page/kanban/${projectId}`);
+            goto(`/${projectId}`);
         } else {
             console.error("Project ID is undefined");
         }
