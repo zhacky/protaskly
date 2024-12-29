@@ -5,10 +5,10 @@
     import PageSideBar from '../PageSideBar.svelte';
 
     let isDialogOpen = false;
-    let newProjectTitle = '';
-    let newProjectDescription = '';
+    let name = '';
+    let description = '';
     let isOpen = false;
-    let selectedOption = '';
+    let frontend = '';
 
     function toggleDropdown () {
         isOpen = !isOpen;
@@ -23,31 +23,49 @@
     }
 
     function handleOptionClick (option: string){
-        selectedOption = option;
+        frontend = option;
         isOpen = false;
     }
 
+    async function createProject() {
+        if (name && description && frontend) {
+            const projectData = {
+            name,
+            description,
+            frontend,
+            createdAt: new Date().toISOString()
+        };
 
+            const token = document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
 
-    function createProject() {
-        if (newProjectTitle && newProjectDescription && selectedOption) {
-            projects.update(currentProjects => [
-                ...currentProjects,
-                {
-                    id: Math.floor(Math.random() * 10000),
-                    title: newProjectTitle,
-                    description: newProjectDescription,
-                    frontend: selectedOption,
-                    createdAt: new Date()
-                }
-            ]);
-            isDialogOpen = false;
-            newProjectTitle = '';
-            newProjectDescription = '';
-            console.log('Project created successfully');
+            const response = await fetch('/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(projectData)
+            });
+
+            console.log('Response', response);
+            console.log('Token:', token);
+
+            if (response.ok) {
+                const result = await response.json();
+                projects.update(currentProjects => [
+                    ...currentProjects,
+                    result.project
+                ]);
+                isDialogOpen = false;
+                name = '';
+                description = '';
+                frontend = '';
+                console.log('Project created successfully');
+            } else {
+                console.error('Failed to create project');
+            }
         }
     }
-
 
     function navigateToKanban(projectId: number) {
         if (projectId !== undefined) {
@@ -101,7 +119,7 @@
                     <div class="flex flex-row">
                         <input
                           type="text"
-                          bind:value={newProjectTitle}
+                          bind:value={name}
                           placeholder="Project Title"
                           class="w-full p-2 border rounded mb-4"
                         />
@@ -113,7 +131,7 @@
                     <div>
                         <div class="flex flex-row">
                             <textarea
-                              bind:value={newProjectDescription}
+                              bind:value={description}
                               placeholder="Project Description"
                               class="w-full p-2 border rounded mb-4"
                               rows="3"
@@ -126,7 +144,7 @@
 
                     <div class="w-auto">
                         <button class="dropdown-wrapper" on:click={toggleDropdown}>
-                            <span>{selectedOption || 'Frontend'}</span>
+                            <span>{frontend || 'Frontend'}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon ml-auto" viewBox="0 0 16 16">
                                 <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                             </svg>

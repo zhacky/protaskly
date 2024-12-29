@@ -39,14 +39,14 @@
 	// const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
 	// const genders = ['Male', 'Female'];
 
-	function evaluatePasswordStrength(newPassword: string): void {
-		if (newPassword.length < 6) {
+	function evaluatePasswordStrength(password: string): void {
+		if (password.length < 6) {
 			passwordStrength = 'Weak';
 			passwordColor = 'text-red-500';
-		} else if (newPassword.length < 10) {
+		} else if (password.length < 10) {
 			passwordStrength = 'Moderate';
 			passwordColor = 'text-yellow-500';
-		} else if (/[A-Z]/.test(newPassword) && /[0-9]/.test(newPassword) && /[^A-Za-z0-9]/.test(newPassword)) {
+		} else if (/[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
 			passwordStrength = 'Strong';
 			passwordColor = 'text-green-500';
 		} else {
@@ -55,8 +55,8 @@
 		}
 	}
 
-	$: if (newPassword) {
-		evaluatePasswordStrength(newPassword);
+	$: if (password) {
+		evaluatePasswordStrength(password);
 		showStrength = true;
 	} else {
 		showStrength = false;
@@ -74,6 +74,8 @@
             method: 'POST',
             body: formData
         });
+
+		console.log(response);
 
         if (response.ok) {
             console.log('Registration successful');

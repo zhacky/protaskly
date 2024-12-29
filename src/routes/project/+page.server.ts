@@ -3,61 +3,52 @@ import type { Actions } from './$types';
 import { env } from '$env/dynamic/private';
 
 export const actions = {
-    default: async ({ cookies, request }) => {
-        let apiUrl = env.VITE_API_URL;
-        if (apiUrl === undefined) {
-            apiUrl = "http://api.protaskly.com:8080";
+    default: async ({request, fetch }) => {
+        const apiUrl = env.VITE_API_URL || "http://api.protaskly.com:8080";
+        const formData = await request.formData();
+        const name = formData.get('name');
+        const description = formData.get('description');
+        const frontend = formData.get('frontend');
+
+        if (!name || !description || !frontend) {
+            return fail(400, { error: 'Missing required fields' });
         }
-        const data = await request.formData();
-        const username = data.get('username');
-        const password = data.get('password');
-        console.log(apiUrl);
-        
-        if (!username || !password) {
-            return fail(400, { error: 'Username and password are required' });
-        }
+
+        const projectDto = {
+            name: name,
+            description: description,
+            frontend: frontend,
+            createdAt: new Date().toISOString()
+        };
+
+        const cookieHeader = request.headers.get('cookie');
+        const token = cookieHeader?.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
+
+        if (!token) {
+            return fail(401, { error: 'Unauthorized' });
+        }   
 
         try {
-            const response = await fetch(`${apiUrl}/authenticate`, {
+            const response = await fetch(`${apiUrl}/projects`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(projectDto)
             });
+
+            console.log("Response:", response);
 
             if (!response.ok) {
-                return fail(response.status, { error: 'Authentication failed' });
+                return fail(response.status, { error: 'Failed to create project' });
             }
 
-            const result = await response.json();
-            const { token, user } = result;
-
-            data.set('token', token);
-
-            //Store the token in a cookie
-            cookies.set('token', token, {
-                httpOnly: false,
-                path: '/',
-                secure: false
-            });
-
-            //Store the username in a cookie
-            cookies.set('username', user.username, {
-                httpOnly: false,
-                path: '/',
-                secure: false
-            });
-            data.set("token", token)
-            return {success: true,
-                token: token,
-                username: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                message: 'Authenticated successfully',
-                apiUrl: apiUrl};
+            const project = await response.json();
+            return { success: true, project };
         } catch (error) {
-            console.error(error);
-            return fail(500, { error: 'Internal server error' });
+            return fail(500, { error: 'Server error' });
         }
+        
     }
 } satisfies Actions;
