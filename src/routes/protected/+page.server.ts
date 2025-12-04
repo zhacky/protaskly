@@ -8,7 +8,7 @@ export const load = async ({cookies}) => {
 		throw redirect(302, '/login')
 	}
 
-	let apiUrl = env.VITE_API_URL;
+	let apiUrl = env.API_URL;
 	if (apiUrl === undefined) {
 		apiUrl = "http://api.protaskly.com:8080";
 	}

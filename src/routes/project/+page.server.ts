@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 
 export const actions = {
     default: async ({request, fetch }) => {
-        const apiUrl = env.VITE_API_URL || "http://api.protaskly.com:8080";
+        const apiUrl = env.API_URL || "http://api.protaskly.com:8080";
         const formData = await request.formData();
         const name = formData.get('name');
         const description = formData.get('description');

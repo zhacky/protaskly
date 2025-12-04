@@ -4,7 +4,7 @@ import { env } from '$env/dynamic/private';
 
 export const actions = {
 	default: async ({ cookies, request }) => {
-		let apiUrl = env.VITE_API_URL;
+		let apiUrl = env.API_URL;
 		if (apiUrl === undefined) {
 			apiUrl = "http://api.protaskly.com:8080";
 		}
